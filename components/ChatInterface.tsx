@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, RotateCcw, FileText, MessageCircle, Shield, Globe } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -66,7 +67,7 @@ export function ChatInterface() {
   const sendMessageToAPI = async (query: string, namespace: string, sessionId: string | null) => {
     try {
       const requestBody: any = {
-        q: query,
+        query: query,
         namespace: namespace
       };
 
@@ -75,7 +76,7 @@ export function ChatInterface() {
         requestBody.session_id = sessionId;
       }
 
-      const response = await fetch('http://localhost:8000/query', {
+      const response = await fetch('http://localhost:8000/api/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -326,13 +327,10 @@ export function ChatInterface() {
                                 <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                                 <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
                               </div>
-                              <span className="text-xs text-muted-foreground">
-                                {activeMode === 'customer' ? 'Searching public documents...' : 'Searching all company data...'}
-                              </span>
                             </div>
                           ) : (
                             <div className="whitespace-pre-wrap">
-                              {message.content}
+                              <ReactMarkdown>{message.content}</ReactMarkdown>
                             </div>
                           )}
                         </div>
